@@ -22,7 +22,7 @@ var grunt = require('grunt');
     test.ifError(value)
 */
 
-exports.tag = {
+exports.all_tests = {
 
   setUp: function(done) {
     done();
