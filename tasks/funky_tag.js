@@ -47,7 +47,7 @@ module.exports = function(grunt) {
     grunt.fail.warn(message || 'Task failed.');
   }
 
-  grunt.registerTask('funky_tag', 'Commit and tag.', function () {
+  grunt.registerTask('funky_tag', function () {
     var pkg = grunt.config('pkg');
     var tag = pkg.version;
 
