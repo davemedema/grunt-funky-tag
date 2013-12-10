@@ -59,7 +59,7 @@ module.exports = function(grunt) {
   /**
    * Register task.
    */
-  grunt.registerTask('tag', 'Commit and tag.', function () {
+  grunt.registerTask('funky_tag', 'Commit and tag.', function () {
     var pkg = grunt.config('pkg');
     var tag = pkg.version;
 
