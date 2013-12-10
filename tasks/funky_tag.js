@@ -11,16 +11,10 @@
 var shell = require('shelljs');
 var semver = require('semver');
 
-/**
- * Execute a shell command.
- */
 function exec(command) {
   return shell.exec(command, { silent: true });
 }
 
-/**
- * Git utilities.
- */
 var git = {
   exists: function() {
     return (exec('git status').code === 0);
@@ -48,17 +42,11 @@ var git = {
 
 module.exports = function(grunt) {
 
-  /**
-   * Failed.
-   */
   function fail(message, error) {
     if (error) grunt.log.error(error);
     grunt.fail.warn(message || 'Task failed.');
   }
 
-  /**
-   * Register task.
-   */
   grunt.registerTask('funky_tag', 'Commit and tag.', function () {
     var pkg = grunt.config('pkg');
     var tag = pkg.version;
