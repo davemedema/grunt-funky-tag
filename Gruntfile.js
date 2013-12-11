@@ -50,8 +50,8 @@ module.exports = function(grunt) {
 
   grunt.registerTask('release', function(type) {
     grunt.task.run('test');
-    grunt.task.run('funky_bump:' + (type || 'patch'));
-    grunt.task.run('funky_tag');
+    grunt.task.run('bump:' + (type || 'patch'));
+    grunt.task.run('tag');
   });
 
   grunt.registerTask('test', ['clean', 'jshint', 'nodeunit']);

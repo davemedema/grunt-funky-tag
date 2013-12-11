@@ -74,7 +74,7 @@ module.exports = function(grunt) {
   var utils = require('funky-grunt-utils')(grunt);
 
   // Register task
-  grunt.registerTask('funky_tag', 'Commit and tag.', function() {
+  grunt.registerTask('tag', 'Commit and tag.', function() {
     var pkg = grunt.config('pkg');
     var tag = pkg.version;
 
