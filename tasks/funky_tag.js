@@ -11,14 +11,32 @@
 var shell = require('shelljs');
 var semver = require('semver');
 
+/**
+ * Executes a shell command.
+ *
+ * @param {String} command
+ */
 function exec(command) {
   return shell.exec(command, { silent: true });
 }
 
-var git = {
+// Repo utilities
+var repo = {
+
+  /**
+   * Checks whether a repo exists.
+   *
+   * @return {Boolean}
+   */
   exists: function() {
     return (exec('git status').code === 0);
   },
+  
+  /**
+   * Returns the highest tag in the repo.
+   *
+   * @return {String}
+   */
   getHighestTag: function() {
     var highestTag = '0.0.0';
     var tags = exec('git tag');
@@ -35,19 +53,37 @@ var git = {
 
     return highestTag;
   },
+
+  /**
+   * Checks if the repo is clean.
+   *
+   * @return {Boolean}
+   */
   isClean: function() {
     return (exec('git diff-index --quiet HEAD --').code === 0);
   }
 };
 
+/**
+ * Exports.
+ *
+ * @param {Object} grunt
+ */
 module.exports = function(grunt) {
 
+  /**
+   * Displays `message` and aborts Grunt. Optionally logs `error`.
+   *
+   * @param {String} message
+   * @param {Mixed} error
+   */
   function fail(message, error) {
     if (error) grunt.log.error(error);
     grunt.fail.warn(message || 'Task failed.');
   }
 
-  grunt.registerTask('funky_tag', function() {
+  // Register task
+  grunt.registerTask('funky_tag', 'Commit and tag.', function() {
     var pkg = grunt.config('pkg');
     var tag = pkg.version;
 
@@ -57,22 +93,20 @@ module.exports = function(grunt) {
     }
 
     // Make sure have a repository
-    if (!git.exists()) {
+    if (!repo.exists()) {
       fail('Repository not found.');
     }
 
     // Validate tag
-    var highestTag = git.getHighestTag();
+    var highestTag = repo.getHighestTag();
 
     if (highestTag && !semver.gt(tag, highestTag)) {
       fail('"' + tag + '" is lower or equal than the current highest tag "' + highestTag + '".');
     }
 
     // Commit
-    if (!git.isClean()) {
-      if (exec('git add .').code === 0) {
-        grunt.log.writeln('All file contents added to the index.');
-      }
+    if (!repo.isClean()) {
+      exec('git add .');
       if (exec('git commit -a -m "' + tag + '"').code === 0) {
         grunt.log.ok('Committed as: ' + tag);
       }
