@@ -31,7 +31,7 @@ var repo = {
   exists: function() {
     return (exec('git status').code === 0);
   },
-  
+
   /**
    * Returns the highest tag in the repo.
    *
@@ -71,16 +71,7 @@ var repo = {
  */
 module.exports = function(grunt) {
 
-  /**
-   * Displays `message` and aborts Grunt. Optionally logs `error`.
-   *
-   * @param {String} message
-   * @param {Mixed} error
-   */
-  function fail(message, error) {
-    if (error) grunt.log.error(error);
-    grunt.fail.warn(message || 'Task failed.');
-  }
+  var utils = require('funky-grunt-utils')(grunt);
 
   // Register task
   grunt.registerTask('funky_tag', 'Commit and tag.', function() {
@@ -89,19 +80,19 @@ module.exports = function(grunt) {
 
     // Make sure we have a valid tag
     if (!semver.valid(tag)) {
-      fail('"' + tag + '" is not a valid semantic version.');
+      utils.fail('"' + tag + '" is not a valid semantic version.');
     }
 
     // Make sure have a repository
     if (!repo.exists()) {
-      fail('Repository not found.');
+      utils.fail('Repository not found.');
     }
 
     // Validate tag
     var highestTag = repo.getHighestTag();
 
     if (highestTag && !semver.gt(tag, highestTag)) {
-      fail('"' + tag + '" is lower or equal than the current highest tag "' + highestTag + '".');
+      utils.fail('"' + tag + '" is lower or equal than the current highest tag "' + highestTag + '".');
     }
 
     // Commit
@@ -116,7 +107,7 @@ module.exports = function(grunt) {
     var tagCmd = exec('git tag v' + tag);
 
     if (tagCmd.code !== 0) {
-      fail('Couldn\'t tag the last commit.', tagCmd.output);
+      utils.fail('Couldn\'t tag the last commit.', tagCmd.output);
     } else {
       grunt.log.ok('Tagged as: ' + tag);
     }

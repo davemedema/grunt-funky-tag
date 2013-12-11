@@ -1,3 +1,3 @@
 # grunt-funky-tag
 
-> Commit and tag.
+Commit and tag.
