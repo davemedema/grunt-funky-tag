@@ -49,6 +49,7 @@ module.exports = function(grunt) {
   grunt.registerTask('default', ['test']);
 
   grunt.registerTask('release', function(type) {
+    grunt.task.run('test');
     grunt.task.run('bump:' + (type || 'patch'));
     grunt.task.run('tag');
   });
