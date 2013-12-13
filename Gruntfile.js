@@ -12,7 +12,7 @@ module.exports = function(grunt) {
 
     // `clean`
     clean: {
-      all: ['tmp']
+      test: ['tmp']
     },
 
     // `jshint`
@@ -23,7 +23,7 @@ module.exports = function(grunt) {
       all: [
         'Gruntfile.js',
         'tasks/**/*.js',
-        '<%= nodeunit.files %>'
+        'test/**/*_test.js'
       ]
     },
 
@@ -49,7 +49,6 @@ module.exports = function(grunt) {
   grunt.registerTask('default', ['test']);
 
   grunt.registerTask('release', function(type) {
-    grunt.task.run('test');
     grunt.task.run('bump:' + (type || 'patch'));
     grunt.task.run('tag');
   });

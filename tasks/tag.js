@@ -20,7 +20,6 @@ function exec(command) {
   return shell.exec(command, { silent: true });
 }
 
-// Repo utilities
 var repo = {
 
   /**
@@ -78,24 +77,24 @@ module.exports = function(grunt) {
     var pkg = grunt.config('pkg');
     var tag = pkg.version;
 
-    // Make sure we have a valid tag
+    // make sure we have a valid tag
     if (!semver.valid(tag)) {
       utils.fail('"' + tag + '" is not a valid semantic version.');
     }
 
-    // Make sure have a repository
+    // make sure have a repository
     if (!repo.exists()) {
       utils.fail('Repository not found.');
     }
 
-    // Validate tag
+    // validate tag
     var highestTag = repo.getHighestTag();
 
     if (highestTag && !semver.gt(tag, highestTag)) {
       utils.fail('"' + tag + '" is lower or equal than the current highest tag "' + highestTag + '".');
     }
 
-    // Commit
+    // commit
     if (!repo.isClean()) {
       exec('git add .');
       if (exec('git commit -a -m "' + tag + '"').code === 0) {
@@ -103,7 +102,7 @@ module.exports = function(grunt) {
       }
     }
 
-    // Tag
+    // tag
     var tagCmd = exec('git tag v' + tag);
 
     if (tagCmd.code !== 0) {
